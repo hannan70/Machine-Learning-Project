@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %} Air Quality Prediction {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <center><h2 style="margin-top: 20px">Air Quality Prediction</h2></center>
+    <div class="row" style="margin-top: 50px; margin-bottom: 100px" >
+        <div class="col-md-12 mx-auto">
+            <form action="{{ url_for('predict') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- temperature -->
+                        <label>Temperature</label>
+                        <br>
+                            <span id="slider1Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider1"> <input type="hidden" value="" id="slider1_value" name="temperature"> </div>
+                        <br>
+                        <!-- temperature end -->
+                        <label>Humidity</label>
+                        <br>
+                            <span id="slider2Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div  id="slider2">  <input id="slider2_value" type="hidden" value="" name="humidity"> </div>
+                        <br>
+                        <!-- Humidity end -->
+
+                        <label>PM2.5</label>
+                        <br>
+                            <span id="slider3Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider3">  <input id="slider3_value"  value="" type="hidden" name="pm2"> </div>
+                        <br>
+                        <!-- PM2.5 end -->
+
+                        <label>PM10</label>
+                        <br>
+                            <span id="slider4Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider4">  <input id="slider4_value"  value="" type="hidden" name="PM210"> </div>
+                        <br>
+                        <!-- PM10 end -->
+
+                        <label>NO2</label>
+                        <br>
+                            <span id="slider5Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider5">  <input id="slider5_value"  value="" type="hidden" name="NO2"> </div>
+                        <br>
+                        <!-- NO2 end -->
+                    </div>
+                    <div class="col-md-6">
+                        <label>SO2</label>
+                        <br>
+                            <span id="slider6Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider6">  <input id="slider6_value"  value="" type="hidden" name="SO2"> </div>
+                        <br>
+                        <!-- SO2 end -->
+
+                        <label>CO</label>
+                        <br>
+                            <span id="slider7Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider7">  <input id="slider7_value"  value="" type="hidden" name="CO"> </div>
+                        <br>
+                        <!-- CO end -->
+
+                        <label>Proximity To Industrial Areas</label>
+                        <br>
+                            <span id="slider8Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider8">  <input id="slider8_value"  value="" type="hidden" name="Proximity_to_Industrial_Areas"> </div>
+                        <br>
+                        <!-- Proximity_to_Industrial_Areas end -->
+
+                        <label>Population Density</label>
+                        <br>
+                            <span id="slider9Output" style="margin-bottom:10px; display: inline-block"> Range: </span>
+                            <div id="slider9">  <input id="slider9_value"  value="" type="hidden" name="Population_Density"> </div>
+
+                        <span style="font-size:25px; margin-bottom:10px; display:inline-block; margin-top: 10px">Air Quality: </span>
+                        {% for i in prediction %}
+                            {% if i == 0 %}
+                                <span style="font-size:25px; margin-bottom:10px; display:inline-block">Moderate</span>
+                            {% elif i == 1 %}
+                                <span style="font-size:25px; margin-bottom:10px; display:inline-block">Good</span>
+                            {% elif i == 2 %}
+                                <span style="font-size:25px; margin-bottom:10px; display:inline-block">Hazardous</span>
+                            {% elif i == 3 %}
+                                <span style="font-size:25px; margin-bottom:10px; display:inline-block">Poor</span>
+                            {% endif %}
+                        {% endfor %}
+                        <button class="btn btn-primary form-control d-block" type="submit">Predict</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  $(function () {
+
+      // Reusable slider initialization function
+      function initSlider(sliderId, outputId, inputId, options) {
+            const { min, max, value } = options;
+
+            $(`#${sliderId}`).slider({
+              min: min,
+              max: max,
+              value: value,
+              slide: function (event, ui) {
+                $(`#${outputId}`).html("Range: " + ui.value);
+                $(`#${inputId}`).val(ui.value);
+              },
+            });
+
+            // Set initial values
+            $(`#${outputId}`).html("Range: " + value);
+            $(`#${inputId}`).val(value);
+      }
+
+      // Initialize sliders
+      initSlider("slider1", "slider1Output", "slider1_value", { min: 10, max: 60, value: 30 });
+      initSlider("slider2", "slider2Output", "slider2_value", { min: 30, max: 130, value: 60 });
+      initSlider("slider3", "slider3Output", "slider3_value", { min: 0, max: 295, value: 100 });
+      initSlider("slider4", "slider4Output", "slider4_value", { min: -10, max: 320, value: 150 });
+      initSlider("slider5", "slider5Output", "slider5_value", { min: 5, max: 70, value: 40 });
+      initSlider("slider6", "slider6Output", "slider6_value", { min: -10, max: 50, value: 35 });
+      initSlider("slider7", "slider7Output", "slider7_value", { min: 0, max: 5, value: 3 });
+      initSlider("slider8", "slider8Output", "slider8_value", { min: 0, max: 30, value: 20 });
+      initSlider("slider9", "slider9Output", "slider9_value", { min: 100, max: 1000, value: 500 });
+
+
+
+     });
+
+
+</script>
+{% endblock %}
